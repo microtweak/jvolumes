@@ -1,4 +1,4 @@
-package com.github.microtweak.storage;
+package com.github.microtweak.jvolumes;
 
 public interface VolumeResolver<S extends VolumeSettings> {
 

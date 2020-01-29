@@ -1,4 +1,4 @@
-package com.github.microtweak.storage;
+package com.github.microtweak.jvolumes;
 
 import org.junit.jupiter.api.Test;
 

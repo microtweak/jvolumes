@@ -1,4 +1,4 @@
-package com.github.microtweak.storage.exception;
+package com.github.microtweak.jvolumes.exception;
 
 public class JVolumeException extends RuntimeException {
 

@@ -1,6 +1,6 @@
-package com.github.microtweak.storage.provider.local;
+package com.github.microtweak.jvolumes.provider.temp;
 
-import com.github.microtweak.storage.VolumeSettings;
+import com.github.microtweak.jvolumes.VolumeSettings;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
@@ -10,11 +10,9 @@ import java.util.List;
 
 @Getter
 @Builder
-public class LocalVolumeSettings implements VolumeSettings {
+public class TempVolumeSettings implements VolumeSettings {
 
     private String name;
-
-    private String physicalDirectory;
 
     @Singular
     private List<FileAttribute<?>> attributes;

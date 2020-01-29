@@ -1,7 +1,7 @@
-package com.github.microtweak.storage.provider;
+package com.github.microtweak.jvolumes.provider;
 
-import com.github.microtweak.storage.VolumeResolver;
-import com.github.microtweak.storage.VolumeSettings;
+import com.github.microtweak.jvolumes.VolumeResolver;
+import com.github.microtweak.jvolumes.VolumeSettings;
 import lombok.AccessLevel;
 import lombok.Getter;
 

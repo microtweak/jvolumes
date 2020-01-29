@@ -1,7 +1,6 @@
-package com.github.microtweak.storage;
+package com.github.microtweak.jvolumes;
 
-
-import com.github.microtweak.storage.exception.UnknownDeviceProtocolException;
+import com.github.microtweak.jvolumes.exception.UnknownDeviceProtocolException;
 import lombok.Getter;
 import org.apache.commons.lang3.reflect.TypeUtils;
 

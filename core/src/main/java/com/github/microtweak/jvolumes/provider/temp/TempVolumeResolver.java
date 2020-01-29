@@ -1,10 +1,10 @@
-package com.github.microtweak.storage.provider.temp;
+package com.github.microtweak.jvolumes.provider.temp;
 
-import com.github.microtweak.storage.FileResource;
-import com.github.microtweak.storage.ResourceLocation;
-import com.github.microtweak.storage.exception.UnknownVolumeException;
-import com.github.microtweak.storage.provider.AbstractListSettingsVolumeResolver;
-import com.github.microtweak.storage.provider.PhysicalDiskFileResource;
+import com.github.microtweak.jvolumes.FileResource;
+import com.github.microtweak.jvolumes.ResourceLocation;
+import com.github.microtweak.jvolumes.exception.UnknownVolumeException;
+import com.github.microtweak.jvolumes.provider.AbstractListSettingsVolumeResolver;
+import com.github.microtweak.jvolumes.provider.PhysicalDiskFileResource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

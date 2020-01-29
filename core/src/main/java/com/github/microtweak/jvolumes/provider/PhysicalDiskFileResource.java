@@ -1,6 +1,6 @@
-package com.github.microtweak.storage.provider;
+package com.github.microtweak.jvolumes.provider;
 
-import com.github.microtweak.storage.FileResource;
+import com.github.microtweak.jvolumes.FileResource;
 
 import java.io.IOException;
 import java.io.InputStream;

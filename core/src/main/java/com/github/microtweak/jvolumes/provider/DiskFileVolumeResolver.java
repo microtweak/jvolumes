@@ -1,8 +1,8 @@
-package com.github.microtweak.storage.provider;
+package com.github.microtweak.jvolumes.provider;
 
-import com.github.microtweak.storage.FileResource;
-import com.github.microtweak.storage.ResourceLocation;
-import com.github.microtweak.storage.VolumeResolver;
+import com.github.microtweak.jvolumes.FileResource;
+import com.github.microtweak.jvolumes.ResourceLocation;
+import com.github.microtweak.jvolumes.VolumeResolver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
