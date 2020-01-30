@@ -18,6 +18,9 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 @Getter
 public final class ResourceLocation {
 
+    public static final String PROTOCOL_SEPARATOR = "://";
+    public static final String FILE_EXTENSION_SEPARATOR = ".";
+
     private String protocol;
 
     private String volumeName;

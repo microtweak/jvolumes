@@ -1,6 +1,6 @@
 package com.github.microtweak.jvolumes.provider.temp;
 
-import com.github.microtweak.jvolumes.VolumeSettings;
+import com.github.microtweak.jvolumes.provider.PhysicalDiskSettings;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class TempVolumeSettings implements VolumeSettings {
+public class TempVolumeSettings implements PhysicalDiskSettings {
 
     private String name;
 

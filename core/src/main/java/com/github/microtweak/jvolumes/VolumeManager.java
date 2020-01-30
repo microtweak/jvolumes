@@ -10,11 +10,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 
+import static com.github.microtweak.jvolumes.ResourceLocation.PROTOCOL_SEPARATOR;
 import static java.util.Collections.unmodifiableMap;
 
 public final class VolumeManager {
-
-    private static final String PROTOCOL_SEPARATOR = "://";
 
     @Getter
     private static final VolumeManager instance = new VolumeManager();

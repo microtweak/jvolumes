@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 
+import static com.github.microtweak.jvolumes.ResourceLocation.FILE_EXTENSION_SEPARATOR;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
@@ -29,12 +30,12 @@ public class PhysicalDiskFileResource implements FileResource {
 
     @Override
     public String getName() {
-        return substringBeforeLast(getFileName(), ".");
+        return substringBeforeLast(getFileName(), FILE_EXTENSION_SEPARATOR);
     }
 
     @Override
     public String getExtension() {
-        return substringAfterLast(getFileName(), ".");
+        return substringAfterLast(getFileName(), FILE_EXTENSION_SEPARATOR);
     }
 
     @Override
