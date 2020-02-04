@@ -20,23 +20,25 @@ public interface FileResource {
 
     String getExtension();
 
-    long length() throws IOException;
+    long length();
 
     InputStream getInputStream() throws IOException;
 
     OutputStream getOutputStream() throws IOException;
 
     default FileResource copyTo(String dest) throws IOException {
-        return copyTo( VolumeManager.getInstance().getItem(dest) );
+        return copyTo( of(dest) );
     }
 
     default FileResource copyTo(FileResource dest) throws IOException {
-        IOUtils.copy(getInputStream(), dest.getOutputStream());
+        try (OutputStream out = dest.getOutputStream()) {
+            IOUtils.copy(getInputStream(), out);
+        }
         return dest;
     }
 
     default FileResource moveTo(String dest) throws IOException {
-        return moveTo( VolumeManager.getInstance().getItem(dest) );
+        return moveTo( of(dest) );
     }
 
     default FileResource moveTo(FileResource dest) throws IOException {

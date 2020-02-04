@@ -16,10 +16,13 @@
 
     <properties>
         <commons-io.version>2.6</commons-io.version>
+
+        <gcs.version>1.103.1</gcs.version>
     </properties>
 
     <modules>
         <module>core</module>
+        <module>provider-google-gcs</module>
     </modules>
 
     <dependencyManagement>
@@ -41,6 +44,12 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>google-cloud-storage</artifactId>
+                <version>${gcs.version}</version>
             </dependency>
 
             <dependency>

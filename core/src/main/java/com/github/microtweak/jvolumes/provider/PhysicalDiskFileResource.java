@@ -39,8 +39,12 @@ public class PhysicalDiskFileResource implements FileResource {
     }
 
     @Override
-    public long length() throws IOException {
-        return Files.size(resourcePath);
+    public long length() {
+        try {
+            return Files.size(resourcePath);
+        } catch (IOException e) {
+            return -1L;
+        }
     }
 
     @Override
