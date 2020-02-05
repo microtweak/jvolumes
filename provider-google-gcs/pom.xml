@@ -46,7 +46,7 @@
                 <artifactId>serviceloader-maven-plugin</artifactId>
                 <configuration>
                     <services>
-                        <param>com.github.microtweak.jvolumes.VolumeResolver</param>
+                        <param>com.github.microtweak.jvolumes.ProtocolResolver</param>
                     </services>
                 </configuration>
             </plugin>

@@ -1,6 +1,6 @@
 package com.github.microtweak.jvolumes;
 
-public interface VolumeResolver<S extends VolumeSettings> {
+public interface ProtocolResolver<S extends ProtocolSettings> {
 
     String getProtocol();
 

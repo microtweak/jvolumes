@@ -1,14 +1,14 @@
 package com.github.microtweak.jvolumes;
 
 import com.github.microtweak.jvolumes.exception.UnknownVolumeException;
-import com.github.microtweak.jvolumes.provider.AbstractListSettingsVolumeResolver;
+import com.github.microtweak.jvolumes.provider.AbstractListSettingsProtocolResolver;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GoogleCloudStorageVolumeResolver extends AbstractListSettingsVolumeResolver<GoogleCloudStorageSettings> {
+public class GoogleCloudStorageProtocolResolver extends AbstractListSettingsProtocolResolver<GoogleCloudStorageProtocolSettings> {
 
     private final Map<String, Storage> volumeNameStorages = new ConcurrentHashMap<>();
 
@@ -19,13 +19,13 @@ public class GoogleCloudStorageVolumeResolver extends AbstractListSettingsVolume
 
     @Override
     public FileResource resolve(ResourceLocation resourceLocation) {
-        final GoogleCloudStorageSettings settings = findSettings( resourceLocation.getVolumeName() );
+        final GoogleCloudStorageProtocolSettings settings = findSettings( resourceLocation.getVolumeName() );
         final Storage storage = volumeNameStorages.computeIfAbsent( resourceLocation.getVolumeName(), (k) -> newStorage(settings));
 
         return new GoogleCloudStorageFileResource(resourceLocation, storage);
     }
 
-    private GoogleCloudStorageSettings findSettings(String volumeName) {
+    private GoogleCloudStorageProtocolSettings findSettings(String volumeName) {
         switch (getSettings().size()) {
             case 0:
                 throw new UnknownVolumeException("No credentials available to access Google Cloud Storage buckets!");
@@ -41,7 +41,7 @@ public class GoogleCloudStorageVolumeResolver extends AbstractListSettingsVolume
         }
     }
 
-    private Storage newStorage(GoogleCloudStorageSettings settings) {
+    private Storage newStorage(GoogleCloudStorageProtocolSettings settings) {
         return StorageOptions.newBuilder()
                 .setCredentials( settings.getCredentials() )
                 .build()

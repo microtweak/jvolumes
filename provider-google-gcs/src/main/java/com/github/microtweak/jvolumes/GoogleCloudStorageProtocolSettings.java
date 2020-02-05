@@ -20,34 +20,34 @@ import static com.google.auth.oauth2.GoogleCredentials.getApplicationDefault;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class GoogleCloudStorageSettings implements VolumeSettings {
+public class GoogleCloudStorageProtocolSettings implements ProtocolSettings {
 
     @NonNull
     private GoogleCredentials credentials;
     private List<String> buckets = new ArrayList<>();
 
-    public static GoogleCloudStorageSettings fromApplicationDefault() throws IOException {
-        return new GoogleCloudStorageSettings( getApplicationDefault() );
+    public static GoogleCloudStorageProtocolSettings fromApplicationDefault() throws IOException {
+        return new GoogleCloudStorageProtocolSettings( getApplicationDefault() );
     }
 
-    public static GoogleCloudStorageSettings fromJson(InputStream inputStream) throws IOException {
-        return new GoogleCloudStorageSettings( fromStream(inputStream) );
+    public static GoogleCloudStorageProtocolSettings fromJson(InputStream inputStream) throws IOException {
+        return new GoogleCloudStorageProtocolSettings( fromStream(inputStream) );
     }
 
-    public static GoogleCloudStorageSettings fromJson(File file) throws IOException {
+    public static GoogleCloudStorageProtocolSettings fromJson(File file) throws IOException {
         return fromJson( new FileInputStream(file) );
     }
 
-    public static GoogleCloudStorageSettings fromJson(String file) throws IOException {
+    public static GoogleCloudStorageProtocolSettings fromJson(String file) throws IOException {
         return fromJson( new FileInputStream(file) );
     }
 
-    public GoogleCloudStorageSettings bucket(String bucketName) {
+    public GoogleCloudStorageProtocolSettings bucket(String bucketName) {
         buckets.add(bucketName);
         return this;
     }
 
-    public GoogleCloudStorageSettings buckets(String... bucketNames) {
+    public GoogleCloudStorageProtocolSettings buckets(String... bucketNames) {
         Stream.of(bucketNames).filter(StringUtils::isNotBlank).forEach(buckets::add);
         return this;
     }

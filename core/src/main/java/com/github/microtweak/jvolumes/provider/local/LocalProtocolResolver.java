@@ -1,11 +1,11 @@
 package com.github.microtweak.jvolumes.provider.local;
 
-import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskVolumeResolver;
+import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskProtocolResolver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class LocalVolumeResolver extends AbstractPhysicalDiskVolumeResolver<LocalVolumeSettings> {
+public class LocalProtocolResolver extends AbstractPhysicalDiskProtocolResolver<LocalProtocolSettings> {
 
     @Override
     public String getProtocol() {
@@ -13,7 +13,7 @@ public class LocalVolumeResolver extends AbstractPhysicalDiskVolumeResolver<Loca
     }
 
     @Override
-    protected Path getVolumePath(LocalVolumeSettings settings) {
+    protected Path getVolumePath(LocalProtocolSettings settings) {
         return Paths.get(settings.getPhysicalDirectory());
     }
 

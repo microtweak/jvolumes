@@ -2,13 +2,13 @@ package com.github.microtweak.jvolumes.provider;
 
 import com.github.microtweak.jvolumes.FileResource;
 import com.github.microtweak.jvolumes.ResourceLocation;
-import com.github.microtweak.jvolumes.VolumeResolver;
+import com.github.microtweak.jvolumes.ProtocolResolver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-public class DiskFileVolumeResolver implements VolumeResolver<NullVolumeSettings> {
+public class DiskFileProtocolResolver implements ProtocolResolver<NullProtocolSettings> {
 
     @Override
     public String getProtocol() {
@@ -16,7 +16,7 @@ public class DiskFileVolumeResolver implements VolumeResolver<NullVolumeSettings
     }
 
     @Override
-    public void addSetting(NullVolumeSettings setting) {
+    public void addSetting(NullProtocolSettings setting) {
     }
 
     @Override

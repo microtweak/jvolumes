@@ -1,6 +1,6 @@
 package com.github.microtweak.jvolumes.provider;
 
-import com.github.microtweak.jvolumes.VolumeSettings;
+import com.github.microtweak.jvolumes.ProtocolSettings;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class PhysicalDiskSettings<IMPL extends PhysicalDiskSettings> implements VolumeSettings {
+public class PhysicalDiskProtocolSettings<IMPL extends PhysicalDiskProtocolSettings> implements ProtocolSettings {
 
     @NonNull
     private String name;

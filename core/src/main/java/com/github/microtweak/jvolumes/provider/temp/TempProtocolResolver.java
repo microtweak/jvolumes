@@ -1,11 +1,11 @@
 package com.github.microtweak.jvolumes.provider.temp;
 
-import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskVolumeResolver;
+import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskProtocolResolver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class TempVolumeResolver extends AbstractPhysicalDiskVolumeResolver<TempVolumeSettings> {
+public class TempProtocolResolver extends AbstractPhysicalDiskProtocolResolver<TempProtocolSettings> {
 
     @Override
     public String getProtocol() {
@@ -13,7 +13,7 @@ public class TempVolumeResolver extends AbstractPhysicalDiskVolumeResolver<TempV
     }
 
     @Override
-    protected Path getVolumePath(TempVolumeSettings settings) {
+    protected Path getVolumePath(TempProtocolSettings settings) {
         return Paths.get(System.getProperty("java.io.tmpdir"), settings.getName());
     }
 

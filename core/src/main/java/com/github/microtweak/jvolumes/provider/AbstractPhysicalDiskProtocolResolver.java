@@ -6,7 +6,7 @@ import com.github.microtweak.jvolumes.exception.UnknownVolumeException;
 
 import java.nio.file.Path;
 
-public abstract class AbstractPhysicalDiskVolumeResolver<S extends PhysicalDiskSettings> extends AbstractListSettingsVolumeResolver<S> {
+public abstract class AbstractPhysicalDiskProtocolResolver<S extends PhysicalDiskProtocolSettings> extends AbstractListSettingsProtocolResolver<S> {
 
     @Override
     public FileResource resolve(ResourceLocation resourceLocation) {
