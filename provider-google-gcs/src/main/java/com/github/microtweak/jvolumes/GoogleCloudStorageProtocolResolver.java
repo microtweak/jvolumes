@@ -13,8 +13,8 @@ public class GoogleCloudStorageProtocolResolver extends AbstractListSettingsProt
     private final Map<String, Storage> volumeNameStorages = new ConcurrentHashMap<>();
 
     @Override
-    public String getProtocol() {
-        return "gs";
+    public boolean isSupported(ResourceLocation location) {
+        return "gs".equals(location.getProtocol());
     }
 
     @Override

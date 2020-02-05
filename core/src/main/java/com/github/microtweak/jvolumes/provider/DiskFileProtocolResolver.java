@@ -1,22 +1,18 @@
 package com.github.microtweak.jvolumes.provider;
 
 import com.github.microtweak.jvolumes.FileResource;
-import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.ProtocolResolver;
+import com.github.microtweak.jvolumes.ResourceLocation;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-public class DiskFileProtocolResolver implements ProtocolResolver<NullProtocolSettings> {
+public class DiskFileProtocolResolver implements ProtocolResolver {
 
     @Override
-    public String getProtocol() {
-        return "file";
-    }
-
-    @Override
-    public void addSetting(NullProtocolSettings setting) {
+    public boolean isSupported(ResourceLocation location) {
+        return "file".equals(location.getProtocol());
     }
 
     @Override

@@ -5,41 +5,43 @@ import lombok.Getter;
 import org.apache.commons.lang3.reflect.TypeUtils;
 
 import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ServiceLoader;
+import java.util.*;
 
 import static com.github.microtweak.jvolumes.ResourceLocation.PROTOCOL_SEPARATOR;
 import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.unmodifiableSet;
 
 public final class VolumeManager {
 
     @Getter
     private static final VolumeManager instance = new VolumeManager();
 
-    private Map<String, ProtocolResolver<?>> protocols;
-    private Map<Class<?>, ProtocolResolver> settings;
+    private Set<ProtocolResolver> protocols;
+    private Map<Class<?>, ConfigurableProtocolResolver> settings;
 
     private VolumeManager() {
-        protocols = new HashMap<>();
+        protocols = new HashSet<>();
         settings = new HashMap<>();
 
         for (ProtocolResolver resolver : ServiceLoader.load(ProtocolResolver.class)) {
-            protocols.put(resolver.getProtocol(), resolver);
+            protocols.add(resolver);
 
-            TypeVariable<?> typeVar = ProtocolResolver.class.getTypeParameters()[0];
-            settings.put(TypeUtils.getRawType(typeVar, resolver.getClass()), resolver);
+            if (resolver instanceof ConfigurableProtocolResolver) {
+                final ConfigurableProtocolResolver configurable = (ConfigurableProtocolResolver) resolver;
+                final TypeVariable<?> typeVar = ConfigurableProtocolResolver.class.getTypeParameters()[0];
+
+                settings.put(TypeUtils.getRawType(typeVar, configurable.getClass()), configurable);
+            }
         }
 
-        protocols = unmodifiableMap(protocols);
+        protocols = unmodifiableSet(protocols);
         settings = unmodifiableMap(settings);
     }
 
     public VolumeManager addSetting(ProtocolSettings setting) {
         Objects.requireNonNull(setting, String.format("You must provide a valid \"%s\" object!", ProtocolSettings.class.getSimpleName()));
 
-        settings.get(setting.getClass()).addSetting(setting);
+        settings.get( setting.getClass() ).addSetting(setting);
         return this;
     }
 
@@ -49,14 +51,14 @@ public final class VolumeManager {
 
     public FileResource getItem(String expression) {
         final ResourceLocation location = new ResourceLocation(expression);
-        final ProtocolResolver<?> resolver = protocols.get( location.getProtocol() );
+        final String msg = "The protocol \"%s\" is unknown by jVolumes. Check if there is a corresponding module/extension for this protocol and add it as an application dependency!";
 
-        if (resolver == null) {
-            final String msg = "The protocol \"%s\" is unknown by jVolumes. Check if there is a corresponding module/extension for this protocol and add it as an application dependency!";
-            throw new UnknownProtocolException( String.format(msg, location.getProtocol() + PROTOCOL_SEPARATOR) );
-        }
+        return protocols.stream()
+                .filter(r -> r.isSupported(location))
+                .map(r -> r.resolve(location))
+                .findFirst()
+                .orElseThrow(() -> new UnknownProtocolException( String.format(msg, location.getProtocol() + PROTOCOL_SEPARATOR) ) );
 
-        return resolver.resolve(location);
     }
 
 }

@@ -1,10 +1,8 @@
 package com.github.microtweak.jvolumes;
 
-public interface ProtocolResolver<S extends ProtocolSettings> {
+public interface ProtocolResolver {
 
-    String getProtocol();
-
-    void addSetting(S setting);
+    boolean isSupported(ResourceLocation location);
 
     FileResource resolve(ResourceLocation resourceLocation);
 

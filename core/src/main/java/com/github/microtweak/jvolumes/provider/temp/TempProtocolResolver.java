@@ -1,5 +1,6 @@
 package com.github.microtweak.jvolumes.provider.temp;
 
+import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskProtocolResolver;
 
 import java.nio.file.Path;
@@ -8,8 +9,8 @@ import java.nio.file.Paths;
 public class TempProtocolResolver extends AbstractPhysicalDiskProtocolResolver<TempProtocolSettings> {
 
     @Override
-    public String getProtocol() {
-        return "tmp";
+    public boolean isSupported(ResourceLocation location) {
+        return "tmp".equals(location.getProtocol()) || "temp".equals(location.getProtocol());
     }
 
     @Override
