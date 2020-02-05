@@ -5,6 +5,7 @@ import com.github.microtweak.jvolumes.FileResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
@@ -45,6 +46,11 @@ public class PhysicalDiskFileResource implements FileResource {
         } catch (IOException e) {
             return -1L;
         }
+    }
+
+    @Override
+    public URL getUrl() throws IOException {
+        return resourcePath.toUri().toURL();
     }
 
     @Override

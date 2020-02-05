@@ -7,6 +7,8 @@ import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 
 import java.io.*;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.microtweak.jvolumes.ResourceLocation.FILE_EXTENSION_SEPARATOR;
 import static java.util.Optional.ofNullable;
@@ -58,6 +60,17 @@ public class GoogleCloudStorageFileResource implements FileResource {
             final String msg = "The file \"%s\" does not exist in the bucket \"%s\" Google Cloud Storage!";
             throw new FileNotFoundException( String.format(msg, location.getPath(), getBucket()) );
         }
+    }
+
+    @Override
+    public URL getUrl() throws IOException {
+        checkIfBlobExists();
+        return new URL(blob.getSelfLink());
+    }
+
+    public URL getSignedUrl(long duration, TimeUnit unit, Storage.SignUrlOption... options) throws IOException {
+        checkIfBlobExists();
+        return blob.signUrl(10, TimeUnit.MINUTES);
     }
 
     @Override

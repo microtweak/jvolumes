@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 
 public interface FileResource {
 
@@ -21,6 +22,8 @@ public interface FileResource {
     String getExtension();
 
     long length();
+
+    URL getUrl() throws IOException;
 
     InputStream getInputStream() throws IOException;
 
