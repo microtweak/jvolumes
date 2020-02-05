@@ -1,5 +1,7 @@
-package com.github.microtweak.jvolumes;
+package com.github.microtweak.jvolumes.google;
 
+import com.github.microtweak.jvolumes.FileResource;
+import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.exception.UnknownVolumeException;
 import com.github.microtweak.jvolumes.provider.AbstractListSettingsProtocolResolver;
 import com.google.cloud.storage.Storage;
@@ -8,7 +10,7 @@ import com.google.cloud.storage.StorageOptions;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GoogleCloudStorageProtocolResolver extends AbstractListSettingsProtocolResolver<GoogleCloudStorageProtocolSettings> {
+public class GoogleStorageProtocolResolver extends AbstractListSettingsProtocolResolver<GoogleStorageProtocolSettings> {
 
     private final Map<String, Storage> volumeNameStorages = new ConcurrentHashMap<>();
 
@@ -19,13 +21,13 @@ public class GoogleCloudStorageProtocolResolver extends AbstractListSettingsProt
 
     @Override
     public FileResource resolve(ResourceLocation resourceLocation) {
-        final GoogleCloudStorageProtocolSettings settings = findSettings( resourceLocation.getVolumeName() );
+        final GoogleStorageProtocolSettings settings = findSettings( resourceLocation.getVolumeName() );
         final Storage storage = volumeNameStorages.computeIfAbsent( resourceLocation.getVolumeName(), (k) -> newStorage(settings));
 
-        return new GoogleCloudStorageFileResource(resourceLocation, storage);
+        return new GoogleStorageFileResource(resourceLocation, storage);
     }
 
-    private GoogleCloudStorageProtocolSettings findSettings(String volumeName) {
+    private GoogleStorageProtocolSettings findSettings(String volumeName) {
         switch (getSettings().size()) {
             case 0:
                 throw new UnknownVolumeException("No credentials available to access Google Cloud Storage buckets!");
@@ -41,7 +43,7 @@ public class GoogleCloudStorageProtocolResolver extends AbstractListSettingsProt
         }
     }
 
-    private Storage newStorage(GoogleCloudStorageProtocolSettings settings) {
+    private Storage newStorage(GoogleStorageProtocolSettings settings) {
         return StorageOptions.newBuilder()
                 .setCredentials( settings.getCredentials() )
                 .build()

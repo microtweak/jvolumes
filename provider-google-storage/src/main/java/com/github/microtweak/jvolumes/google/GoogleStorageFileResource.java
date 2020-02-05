@@ -1,5 +1,7 @@
-package com.github.microtweak.jvolumes;
+package com.github.microtweak.jvolumes.google;
 
+import com.github.microtweak.jvolumes.FileResource;
+import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.io.CallbackOutputStream;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
@@ -15,14 +17,14 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
-public class GoogleCloudStorageFileResource implements FileResource {
+public class GoogleStorageFileResource implements FileResource {
 
     private ResourceLocation location;
 
     private Bucket bucket;
     private Blob blob;
 
-    GoogleCloudStorageFileResource(ResourceLocation location, Storage storage) {
+    GoogleStorageFileResource(ResourceLocation location, Storage storage) {
         this.location = location;
         final String bucketName = location.getVolumeName();
 
@@ -90,7 +92,7 @@ public class GoogleCloudStorageFileResource implements FileResource {
         return out;
     }
 
-    private void copyToAnotherBucket(GoogleCloudStorageFileResource dest) {
+    private void copyToAnotherBucket(GoogleStorageFileResource dest) {
         ResourceLocation location = dest.location;
         blob.copyTo(location.getVolumeName(), location.getPath());
     }
@@ -99,8 +101,8 @@ public class GoogleCloudStorageFileResource implements FileResource {
     public FileResource copyTo(FileResource dest) throws IOException {
         checkIfBlobExists();
 
-        if (dest instanceof GoogleCloudStorageFileResource) {
-            copyToAnotherBucket( (GoogleCloudStorageFileResource) dest );
+        if (dest instanceof GoogleStorageFileResource) {
+            copyToAnotherBucket( (GoogleStorageFileResource) dest );
             return dest;
         }
 
@@ -111,8 +113,8 @@ public class GoogleCloudStorageFileResource implements FileResource {
     public FileResource moveTo(FileResource dest) throws IOException {
         checkIfBlobExists();
 
-        if (dest instanceof GoogleCloudStorageFileResource) {
-            copyToAnotherBucket( (GoogleCloudStorageFileResource) dest );
+        if (dest instanceof GoogleStorageFileResource) {
+            copyToAnotherBucket( (GoogleStorageFileResource) dest );
 
             delete();
 

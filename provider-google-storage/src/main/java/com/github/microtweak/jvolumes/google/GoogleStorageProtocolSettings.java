@@ -1,5 +1,6 @@
-package com.github.microtweak.jvolumes;
+package com.github.microtweak.jvolumes.google;
 
+import com.github.microtweak.jvolumes.ProtocolSettings;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,34 +21,34 @@ import static com.google.auth.oauth2.GoogleCredentials.getApplicationDefault;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class GoogleCloudStorageProtocolSettings implements ProtocolSettings {
+public class GoogleStorageProtocolSettings implements ProtocolSettings {
 
     @NonNull
     private GoogleCredentials credentials;
     private List<String> buckets = new ArrayList<>();
 
-    public static GoogleCloudStorageProtocolSettings fromApplicationDefault() throws IOException {
-        return new GoogleCloudStorageProtocolSettings( getApplicationDefault() );
+    public static GoogleStorageProtocolSettings fromApplicationDefault() throws IOException {
+        return new GoogleStorageProtocolSettings( getApplicationDefault() );
     }
 
-    public static GoogleCloudStorageProtocolSettings fromJson(InputStream inputStream) throws IOException {
-        return new GoogleCloudStorageProtocolSettings( fromStream(inputStream) );
+    public static GoogleStorageProtocolSettings fromJson(InputStream inputStream) throws IOException {
+        return new GoogleStorageProtocolSettings( fromStream(inputStream) );
     }
 
-    public static GoogleCloudStorageProtocolSettings fromJson(File file) throws IOException {
+    public static GoogleStorageProtocolSettings fromJson(File file) throws IOException {
         return fromJson( new FileInputStream(file) );
     }
 
-    public static GoogleCloudStorageProtocolSettings fromJson(String file) throws IOException {
+    public static GoogleStorageProtocolSettings fromJson(String file) throws IOException {
         return fromJson( new FileInputStream(file) );
     }
 
-    public GoogleCloudStorageProtocolSettings bucket(String bucketName) {
+    public GoogleStorageProtocolSettings bucket(String bucketName) {
         buckets.add(bucketName);
         return this;
     }
 
-    public GoogleCloudStorageProtocolSettings buckets(String... bucketNames) {
+    public GoogleStorageProtocolSettings buckets(String... bucketNames) {
         Stream.of(bucketNames).filter(StringUtils::isNotBlank).forEach(buckets::add);
         return this;
     }
