@@ -1,20 +1,14 @@
 package com.github.microtweak.jvolumes.provider.temp;
 
 import com.github.microtweak.jvolumes.provider.PhysicalDiskSettings;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
-
-import java.nio.file.attribute.FileAttribute;
-import java.util.List;
+import lombok.NonNull;
 
 @Getter
-@Builder
-public class TempVolumeSettings implements PhysicalDiskSettings {
+public class TempVolumeSettings extends PhysicalDiskSettings<TempVolumeSettings> {
 
-    private String name;
-
-    @Singular
-    private List<FileAttribute<?>> attributes;
+    public TempVolumeSettings(@NonNull String name) {
+        super(name);
+    }
 
 }

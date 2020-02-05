@@ -1,21 +1,16 @@
 package com.github.microtweak.jvolumes.provider.local;
 
 import com.github.microtweak.jvolumes.provider.PhysicalDiskSettings;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
-
-import java.nio.file.attribute.FileAttribute;
-import java.util.List;
 
 @Getter
-@Builder
-public class LocalVolumeSettings implements PhysicalDiskSettings {
+public class LocalVolumeSettings extends PhysicalDiskSettings<LocalVolumeSettings> {
 
-    private String name;
     private String physicalDirectory;
 
-    @Singular
-    private List<FileAttribute<?>> attributes;
+    public LocalVolumeSettings(String name, String physicalDirectory) {
+        super(name);
+        this.physicalDirectory = physicalDirectory;
+    }
 
 }
