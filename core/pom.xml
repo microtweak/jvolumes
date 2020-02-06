@@ -11,6 +11,8 @@
 
     <artifactId>jvolumes-core</artifactId>
 
+    <name>jVolumes - Core Module</name>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

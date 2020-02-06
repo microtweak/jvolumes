@@ -14,16 +14,25 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <properties>
-        <commons-io.version>2.6</commons-io.version>
-
-        <google-storage.version>1.103.1</google-storage.version>
-    </properties>
-
     <modules>
         <module>core</module>
         <module>provider-google-storage</module>
     </modules>
+
+    <name>jVolumes</name>
+    <description>An abstraction to handle different types of file storage</description>
+    <url>https://github.com/microtweak/jvolumes</url>
+
+    <scm>
+        <url>https://github.com/microtweak/jvolumes</url>
+        <connection>scm:git:git@github.com:microtweak/jvolumes.git</connection>
+        <developerConnection>scm:git:git@github.com:microtweak/jvolumes.git</developerConnection>
+    </scm>
+
+    <properties>
+        <commons-io.version>2.6</commons-io.version>
+        <google-storage.version>1.103.1</google-storage.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>

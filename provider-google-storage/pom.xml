@@ -11,6 +11,8 @@
 
     <artifactId>jvolumes-google-storage</artifactId>
 
+    <name>jVolumes - Provider for Google Cloud Storage</name>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
