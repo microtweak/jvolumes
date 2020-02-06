@@ -11,15 +11,15 @@ import static com.github.microtweak.jvolumes.ResourceLocation.PROTOCOL_SEPARATOR
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
 
-public final class VolumeManager {
+public final class JVolumes {
 
     @Getter
-    private static final VolumeManager instance = new VolumeManager();
+    private static final JVolumes instance = new JVolumes();
 
     private Set<ProtocolResolver> protocols;
     private Map<Class<?>, ConfigurableProtocolResolver> settings;
 
-    private VolumeManager() {
+    private JVolumes() {
         protocols = new HashSet<>();
         settings = new HashMap<>();
 
@@ -38,7 +38,7 @@ public final class VolumeManager {
         settings = unmodifiableMap(settings);
     }
 
-    public VolumeManager addSetting(ProtocolSettings setting) {
+    public JVolumes addSetting(ProtocolSettings setting) {
         Objects.requireNonNull(setting, String.format("You must provide a valid \"%s\" object!", ProtocolSettings.class.getSimpleName()));
 
         settings.get( setting.getClass() ).addSetting(setting);

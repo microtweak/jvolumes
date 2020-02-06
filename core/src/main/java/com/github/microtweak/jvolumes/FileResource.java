@@ -10,11 +10,11 @@ import java.net.URL;
 public interface FileResource {
 
     static FileResource of(String protocol, String path) {
-        return VolumeManager.getInstance().getItem(protocol, path);
+        return JVolumes.getInstance().getItem(protocol, path);
     }
 
     static FileResource of(String expression) {
-        return VolumeManager.getInstance().getItem(expression);
+        return JVolumes.getInstance().getItem(expression);
     }
 
     String getName();
