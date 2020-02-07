@@ -18,7 +18,7 @@ public class DiskFileProtocolResolver implements ProtocolResolver {
     @Override
     public FileResource resolve(ResourceLocation resourceLocation) {
         final Path resourcePath = Paths.get(resourceLocation.getVolumeName(), resourceLocation.getPath());
-        return new PhysicalDiskFileResource( resourcePath, Collections.emptyList() );
+        return new PhysicalDiskFileResource(resourceLocation, resourcePath, Collections.emptyList());
     }
 
 }

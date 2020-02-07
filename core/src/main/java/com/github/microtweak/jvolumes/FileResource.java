@@ -17,6 +17,8 @@ public interface FileResource {
         return JVolumes.getInstance().getItem(expression);
     }
 
+    ResourceLocation getLocation();
+
     String getName();
 
     String getExtension();

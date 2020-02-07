@@ -1,6 +1,8 @@
 package com.github.microtweak.jvolumes.provider;
 
 import com.github.microtweak.jvolumes.FileResource;
+import com.github.microtweak.jvolumes.ResourceLocation;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +19,14 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 public class PhysicalDiskFileResource implements FileResource {
 
+    @Getter
+    private ResourceLocation location;
+
     private Path resourcePath;
     private FileAttribute<?>[] attributes;
 
-    public PhysicalDiskFileResource(Path resourcePath, List<FileAttribute<?>> attributes) {
+    public PhysicalDiskFileResource(ResourceLocation location, Path resourcePath, List<FileAttribute<?>> attributes) {
+        this.location = location;
         this.resourcePath = resourcePath;
         this.attributes = attributes.toArray(new FileAttribute[ attributes.size() ]);
     }

@@ -17,7 +17,7 @@ public abstract class AbstractPhysicalDiskProtocolResolver<S extends PhysicalDis
 
         final Path resourcePath = getVolumePath( settings ).resolve( resourceLocation.getPath() );
 
-        return new PhysicalDiskFileResource( resourcePath, settings.getAttributes() ) {};
+        return new PhysicalDiskFileResource(resourceLocation, resourcePath, settings.getAttributes());
     }
 
     protected abstract Path getVolumePath(S settings);

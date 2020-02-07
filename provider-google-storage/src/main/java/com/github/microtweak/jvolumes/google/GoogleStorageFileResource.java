@@ -7,6 +7,7 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
+import lombok.Getter;
 
 import java.io.*;
 import java.net.URL;
@@ -19,6 +20,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 public class GoogleStorageFileResource implements FileResource {
 
+    @Getter
     private ResourceLocation location;
 
     private Bucket bucket;
