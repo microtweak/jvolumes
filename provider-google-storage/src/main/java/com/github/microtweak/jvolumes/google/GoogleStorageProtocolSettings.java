@@ -2,10 +2,9 @@ package com.github.microtweak.jvolumes.google;
 
 import com.github.microtweak.jvolumes.ProtocolSettings;
 import com.google.auth.oauth2.GoogleCredentials;
-import lombok.AccessLevel;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -18,14 +17,24 @@ import java.util.stream.Stream;
 
 import static com.google.auth.oauth2.GoogleCredentials.fromStream;
 import static com.google.auth.oauth2.GoogleCredentials.getApplicationDefault;
+import static java.util.Optional.ofNullable;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoogleStorageProtocolSettings implements ProtocolSettings {
 
-    @NonNull
     private GoogleCredentials credentials;
+    private Storage storage;
+
+    private String projectId;
     private List<String> buckets = new ArrayList<>();
+
+    private GoogleStorageProtocolSettings(GoogleCredentials credentials) {
+        this.credentials = credentials;
+    }
+
+    private GoogleStorageProtocolSettings(Storage storage) {
+        this.storage = storage;
+    }
 
     public static GoogleStorageProtocolSettings fromApplicationDefault() throws IOException {
         return new GoogleStorageProtocolSettings( getApplicationDefault() );
@@ -43,6 +52,15 @@ public class GoogleStorageProtocolSettings implements ProtocolSettings {
         return fromJson( new FileInputStream(file) );
     }
 
+    public static GoogleStorageProtocolSettings fromStorage(Storage storage) {
+        return new GoogleStorageProtocolSettings(storage);
+    }
+
+    public GoogleStorageProtocolSettings projectId(String projectId) {
+        this.projectId = projectId;
+        return this;
+    }
+
     public GoogleStorageProtocolSettings bucket(String bucketName) {
         buckets.add(bucketName);
         return this;
@@ -53,4 +71,17 @@ public class GoogleStorageProtocolSettings implements ProtocolSettings {
         return this;
     }
 
+    public synchronized Storage getStorage() {
+        if (storage == null) {
+            StorageOptions.Builder builder = StorageOptions.newBuilder();
+
+            ofNullable(credentials).ifPresent(builder::setCredentials);
+
+            ofNullable(projectId).ifPresent(builder::setProjectId);
+
+            storage = builder.build().getService();
+        }
+
+        return storage;
+    }
 }
