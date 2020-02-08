@@ -2,6 +2,7 @@ package com.github.microtweak.jvolumes.provider.temp;
 
 import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.provider.AbstractPhysicalDiskProtocolResolver;
+import org.apache.commons.io.FileUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,7 +16,7 @@ public class TempProtocolResolver extends AbstractPhysicalDiskProtocolResolver<T
 
     @Override
     protected Path getVolumePath(TempProtocolSettings settings) {
-        return Paths.get(System.getProperty("java.io.tmpdir"), settings.getName());
+        return Paths.get(FileUtils.getTempDirectoryPath(), settings.getName());
     }
 
 }
