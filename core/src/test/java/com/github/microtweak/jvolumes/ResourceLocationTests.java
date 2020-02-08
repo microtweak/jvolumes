@@ -15,7 +15,7 @@ public class ResourceLocationTests {
         assertAll(
                 () -> assertEquals("file", unixRef.getProtocol()),
                 () -> assertEquals("", unixRef.getVolumeName()),
-                () -> assertEquals("tmp/uploads/xyz.jpg", unixRef.getPath()),
+                () -> assertEquals("/tmp/uploads/xyz.jpg", unixRef.getPath()),
                 () -> assertTrue(unixRef.getParameters().isEmpty())
         );
 
@@ -36,7 +36,7 @@ public class ResourceLocationTests {
         assertAll(
                 () -> assertEquals("file", unixRef.getProtocol()),
                 () -> assertEquals("", unixRef.getVolumeName()),
-                () -> assertEquals("tmp/uploads/xyz.jpg", unixRef.getPath()),
+                () -> assertEquals("/tmp/uploads/xyz.jpg", unixRef.getPath()),
                 () -> assertEquals("2019-01-01", unixRef.getParameters().get("createAt")),
                 () -> assertEquals("2019-01-02", unixRef.getParameters().get("changedAt"))
         );
@@ -59,7 +59,7 @@ public class ResourceLocationTests {
         assertAll(
                 () -> assertEquals("file", unixRef.getProtocol()),
                 () -> assertEquals("", unixRef.getVolumeName()),
-                () -> assertEquals("tmp/uploads/xyz.jpg", unixRef.getPath()),
+                () -> assertEquals("/tmp/uploads/xyz.jpg", unixRef.getPath()),
                 () -> assertEquals("Temp image", unixRef.getParameters().get("description")),
                 () -> assertEquals("português", unixRef.getParameters().get("lang"))
         );
@@ -77,7 +77,7 @@ public class ResourceLocationTests {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-        "file:///tmp/tests/report.txt; file; ''; tmp/tests/report.txt",
+        "file:///tmp/tests/report.txt; file; ''; /tmp/tests/report.txt",
         "file://C:/Windows/Temp/tests/report.txt; file; C:; Windows/Temp/tests/report.txt",
         "tmp://tests/report.txt; tmp; tests; report.txt",
         "local://myapp/reports/march2019.pdf; local; myapp; reports/march2019.pdf",

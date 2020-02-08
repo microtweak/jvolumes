@@ -13,15 +13,21 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public final class ResourceLocation {
 
     public static final String PROTOCOL_SEPARATOR = "://";
+    public static final String PATH_SEPARATOR = "/";
     public static final String FILE_EXTENSION_SEPARATOR = ".";
 
     private URI uri;
+
+    @Getter
+    private String volumeName;
+
+    @Getter
+    private String path;
 
     @Getter
     private Map<String, String> parameters;
@@ -29,23 +35,18 @@ public final class ResourceLocation {
     ResourceLocation(String text) {
         uri = parseUri(text);
         parameters = getParameterMap(uri.getQuery());
+        volumeName = defaultIfBlank(uri.getAuthority(), "");
+        path = isNotBlank(volumeName) ? substringAfter(uri.getPath(), "/") : uri.getPath();
     }
 
     public String getProtocol() {
         return uri.getScheme();
     }
 
-    public String getVolumeName() {
-        return defaultIfBlank(uri.getAuthority(), "");
-    }
-
-    public String getPath() {
-        return substringAfter(uri.getPath(), "/");
-    }
-
     @Override
     public String toString() {
-        return String.join("", getProtocol(), PROTOCOL_SEPARATOR, getVolumeName(), "/", getPath());
+        final String separator = isNotBlank(volumeName) ? PATH_SEPARATOR : "";
+        return String.join("", getProtocol(), PROTOCOL_SEPARATOR, volumeName, separator, path);
     }
 
     private URI parseUri(String text) {
