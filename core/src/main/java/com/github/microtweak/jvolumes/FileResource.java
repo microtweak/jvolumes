@@ -25,7 +25,7 @@ public interface FileResource {
 
     long length();
 
-    URL getUrl() throws IOException;
+    URL getUrl();
 
     InputStream getInputStream() throws IOException;
 

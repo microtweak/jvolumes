@@ -7,6 +7,7 @@ import lombok.Getter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 
 import static com.github.microtweak.jvolumes.ResourceLocation.FILE_EXTENSION_SEPARATOR;
+import static com.github.microtweak.jvolumes.exception.FileResourceNotFoundException.fireIfNotFoundException;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
@@ -55,13 +57,22 @@ public class PhysicalDiskFileResource implements FileResource {
     }
 
     @Override
-    public URL getUrl() throws IOException {
-        return resourcePath.toUri().toURL();
+    public URL getUrl() {
+        try {
+            return resourcePath.toUri().toURL();
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return Files.newInputStream(resourcePath);
+        try {
+            return Files.newInputStream(resourcePath);
+        } catch (IOException e) {
+            fireIfNotFoundException(e, getFileName());
+            throw e;
+        }
     }
 
     private void tryCreateDirectories(FileAttribute<?>... attributes) throws IOException {
@@ -94,7 +105,12 @@ public class PhysicalDiskFileResource implements FileResource {
     private PhysicalDiskFileResource copyTo(PhysicalDiskFileResource dest) throws IOException {
         dest.tryCreateDirectories(attributes);
 
-        Files.copy(resourcePath, dest.resourcePath);
+        try {
+            Files.copy(resourcePath, dest.resourcePath);
+        } catch (IOException e) {
+            fireIfNotFoundException(e, getFileName());
+            throw e;
+        }
 
         return dest;
     }
@@ -121,7 +137,12 @@ public class PhysicalDiskFileResource implements FileResource {
 
     @Override
     public void delete() throws IOException {
-        Files.delete(resourcePath);
+        try {
+            Files.delete(resourcePath);
+        } catch (IOException e) {
+            fireIfNotFoundException(e, getFileName());
+            throw e;
+        }
     }
 
 }

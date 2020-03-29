@@ -2,6 +2,7 @@ package com.github.microtweak.jvolumes.google;
 
 import com.github.microtweak.jvolumes.FileResource;
 import com.github.microtweak.jvolumes.ResourceLocation;
+import com.github.microtweak.jvolumes.exception.FileResourceNotFoundException;
 import com.github.microtweak.jvolumes.io.CallbackOutputStream;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
@@ -10,6 +11,7 @@ import com.google.cloud.storage.Storage;
 import lombok.Getter;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -59,20 +61,24 @@ public class GoogleStorageFileResource implements FileResource {
         return ofNullable(blob).map(Blob::getSize).orElse( -1L);
     }
 
-    private void checkIfBlobExists() throws FileNotFoundException {
+    private void checkIfBlobExists() {
         if (blob == null) {
             final String msg = "The file \"%s\" does not exist in the bucket \"%s\" Google Cloud Storage!";
-            throw new FileNotFoundException( String.format(msg, location.getPath(), getBucket()) );
+            throw new FileResourceNotFoundException( String.format(msg, location.getPath(), getBucket()) );
         }
     }
 
     @Override
-    public URL getUrl() throws IOException {
+    public URL getUrl() {
         checkIfBlobExists();
-        return new URL(blob.getSelfLink());
+        try {
+            return new URL(blob.getSelfLink());
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
-    public URL getSignedUrl(long duration, TimeUnit unit, Storage.SignUrlOption... options) throws IOException {
+    public URL getSignedUrl(long duration, TimeUnit unit, Storage.SignUrlOption... options) {
         checkIfBlobExists();
         return blob.signUrl(10, TimeUnit.MINUTES);
     }
