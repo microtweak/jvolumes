@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.time.temporal.ChronoUnit;
 
 public interface FileResource {
 
@@ -26,6 +27,11 @@ public interface FileResource {
     long length();
 
     URL getUrl();
+
+    default URL getSignedUrl(long duration, ChronoUnit unit) {
+        final String msg = "The \"%s\" object does not support generation of signed URLs!";
+        throw new UnsupportedOperationException(String.format(msg, getClass().getSimpleName()));
+    }
 
     InputStream getInputStream() throws IOException;
 

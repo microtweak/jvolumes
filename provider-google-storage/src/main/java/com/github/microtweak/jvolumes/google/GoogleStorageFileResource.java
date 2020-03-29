@@ -13,6 +13,8 @@ import lombok.Getter;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.microtweak.jvolumes.ResourceLocation.FILE_EXTENSION_SEPARATOR;
@@ -78,9 +80,46 @@ public class GoogleStorageFileResource implements FileResource {
         }
     }
 
-    public URL getSignedUrl(long duration, TimeUnit unit, Storage.SignUrlOption... options) {
+    @Override
+    public URL getSignedUrl(long duration, ChronoUnit chronoUnit) {
         checkIfBlobExists();
-        return blob.signUrl(10, TimeUnit.MINUTES);
+
+        final TimeUnit timeUnit;
+
+        switch (Objects.requireNonNull(chronoUnit, "chronoUnit")) {
+            case NANOS:
+                timeUnit = TimeUnit.NANOSECONDS;
+                break;
+
+            case MICROS:
+                timeUnit = TimeUnit.MICROSECONDS;
+                break;
+
+            case MILLIS:
+                timeUnit = TimeUnit.MILLISECONDS;
+                break;
+
+            case SECONDS:
+                timeUnit = TimeUnit.SECONDS;
+                break;
+
+            case MINUTES:
+                timeUnit = TimeUnit.MINUTES;
+                break;
+
+            case HOURS:
+                timeUnit = TimeUnit.HOURS;
+                break;
+
+            case DAYS:
+                timeUnit = TimeUnit.DAYS;
+                break;
+
+            default:
+                throw new IllegalArgumentException("No TimeUnit equivalent for " + chronoUnit);
+        }
+
+        return blob.signUrl(duration, timeUnit);
     }
 
     @Override
