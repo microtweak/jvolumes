@@ -32,6 +32,7 @@
     <properties>
         <commons-io.version>2.6</commons-io.version>
         <google-storage.version>1.103.1</google-storage.version>
+        <minio.version>7.0.2</minio.version>
     </properties>
 
     <dependencyManagement>
@@ -59,6 +60,13 @@
                 <groupId>com.google.cloud</groupId>
                 <artifactId>google-cloud-storage</artifactId>
                 <version>${google-storage.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>
