@@ -1,6 +1,9 @@
 package com.github.microtweak.jvolumes.google;
 
 import com.github.microtweak.jvolumes.ProtocolSettings;
+import com.github.microtweak.jvolumes.google.emulator.MinioCredentials;
+import com.github.microtweak.jvolumes.google.emulator.MinioServiceFactory;
+import com.github.microtweak.jvolumes.google.emulator.MinioServiceRpcFactory;
 import com.google.auth.Credentials;
 import com.google.cloud.ServiceFactory;
 import com.google.cloud.spi.ServiceRpcFactory;
@@ -61,6 +64,13 @@ public class GoogleStorageSettings implements ProtocolSettings {
         return this;
     }
 
+    public GoogleStorageSettings fromEmulator(String accessKey, String secretKey) {
+        credentials = new MinioCredentials(accessKey, secretKey);
+        serviceFactory = new MinioServiceFactory();
+        serviceRpcFactory = new MinioServiceRpcFactory();
+        return this;
+    }
+
     public GoogleStorageSettings projectId(String projectId) {
         this.projectId = projectId;
         return this;
@@ -80,7 +90,7 @@ public class GoogleStorageSettings implements ProtocolSettings {
         Stream.of(bucketNames).filter(StringUtils::isNotBlank).forEach(buckets::add);
         return this;
     }
-    
+
     protected synchronized Storage create() {
         if (storage == null) {
             final StorageOptions.Builder builder = StorageOptions.newBuilder();
