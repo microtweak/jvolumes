@@ -5,7 +5,7 @@ import com.github.microtweak.jvolumes.ResourceLocation;
 import com.github.microtweak.jvolumes.exception.UnknownVolumeException;
 import com.github.microtweak.jvolumes.provider.AbstractListSettingsProtocolResolver;
 
-public class GoogleStorageProtocolResolver extends AbstractListSettingsProtocolResolver<GoogleStorageProtocolSettings> {
+public class GoogleStorageProtocolResolver extends AbstractListSettingsProtocolResolver<GoogleStorageSettings> {
 
     @Override
     public boolean isSupported(ResourceLocation location) {
@@ -14,11 +14,11 @@ public class GoogleStorageProtocolResolver extends AbstractListSettingsProtocolR
 
     @Override
     public FileResource resolve(ResourceLocation resourceLocation) {
-        final GoogleStorageProtocolSettings settings = findSettings( resourceLocation.getVolumeName() );
-        return new GoogleStorageFileResource(resourceLocation, settings.getStorage());
+        final GoogleStorageSettings settings = findSettings( resourceLocation.getVolumeName() );
+        return new GoogleStorageFileResource(resourceLocation, settings.create());
     }
 
-    private GoogleStorageProtocolSettings findSettings(String volumeName) {
+    private GoogleStorageSettings findSettings(String volumeName) {
         switch (getSettings().size()) {
             case 0:
                 throw new UnknownVolumeException("No credentials available to access Google Cloud Storage buckets!");
