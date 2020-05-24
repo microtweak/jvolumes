@@ -16,11 +16,11 @@ import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MinioStorageProxy implements InvocationHandler {
+class MinioStorageProxy implements InvocationHandler {
 
     private Storage impl;
 
-    public static Storage of(Storage impl) {
+    static Storage of(Storage impl) {
         final InvocationHandler handler = new MinioStorageProxy(impl);
         return (Storage) Proxy.newProxyInstance(Storage.class.getClassLoader(), new Class[] { Storage.class }, handler);
     }

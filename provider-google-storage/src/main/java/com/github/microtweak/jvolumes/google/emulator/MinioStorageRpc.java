@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class MinioStorageRpc implements StorageRpc {
+class MinioStorageRpc implements StorageRpc {
 
     private MinioClient client;
 
