@@ -16,21 +16,19 @@ import io.minio.PutObjectOptions;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InvalidEndpointException;
 import io.minio.errors.InvalidPortException;
-import io.minio.errors.MinioException;
 import io.minio.http.Method;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URL;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static com.github.microtweak.jvolumes.google.emulator.MinioAction.doAction;
 
 class MinioStorageRpc implements StorageRpc {
 
@@ -372,21 +370,6 @@ class MinioStorageRpc implements StorageRpc {
     @Override
     public ServiceAccount getServiceAccount(String projectId) {
         throw new UnsupportedOperationException();
-    }
-
-    private <R> R doAction(MinioAction<R> action) {
-        try {
-            return action.execute();
-        } catch (InvalidKeyException | IllegalArgumentException | NoSuchAlgorithmException | MinioException | IOException e) {
-            return ExceptionUtils.rethrow(e);
-        }
-    }
-
-    @FunctionalInterface
-    interface MinioAction<R> {
-
-        R execute() throws MinioException, InvalidKeyException, IllegalArgumentException, NoSuchAlgorithmException, IOException;
-
     }
 
 }
