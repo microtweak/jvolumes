@@ -48,7 +48,7 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public Bucket create(Bucket bucket, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             client.makeBucket(bucket.getName());
             return bucket;
         });
@@ -56,7 +56,7 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public StorageObject create(StorageObject object, InputStream content, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
+        doAction(() -> {
             final PutObjectOptions putOpts = new PutObjectOptions(content.available(), -1);
 
             Optional.ofNullable( object.getContentType() ).filter(StringUtils::isNotBlank).ifPresent(putOpts::setContentType);
@@ -64,6 +64,8 @@ public class MinioStorageRpc implements StorageRpc {
             client.putObject(object.getBucket(), object.getName(), content, putOpts);
             return object;
         });
+
+        return get(object, options);
     }
 
     @Override
@@ -78,31 +80,41 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public Bucket get(Bucket bucket, Map<Option, ?> options) {
-        return doRetuningAction(() -> client.bucketExists(bucket.getName()) ? bucket : null);
+        return doAction(() -> client.bucketExists(bucket.getName()) ? bucket : null);
     }
 
     @Override
     public StorageObject get(StorageObject object, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
-            final ObjectStat stat = client.statObject(object.getBucket(), object.getName());
-            final String objectUrl = client.getObjectUrl(object.getBucket(), object.getName());
+        return doAction(() -> {
+            try {
+                final ObjectStat stat = client.statObject(object.getBucket(), object.getName());
+                final String objectUrl = client.getObjectUrl(object.getBucket(), object.getName());
 
-            object.setContentType( stat.contentType() );
-            object.setSize( BigInteger.valueOf( stat.length() ) );
-            object.setEtag( stat.etag() );
-            object.setSelfLink( objectUrl );
+                object.setContentType( stat.contentType() );
+                object.setSize( BigInteger.valueOf( stat.length() ) );
+                object.setEtag( stat.etag() );
+                object.setSelfLink( objectUrl );
 
-            final Date dateTimeCreated = Date.from(stat.createdTime().toInstant());
-            final TimeZone timeZoneCreated = TimeZone.getTimeZone(stat.createdTime().getZone());
+                final Date dateTimeCreated = Date.from(stat.createdTime().toInstant());
+                final TimeZone timeZoneCreated = TimeZone.getTimeZone(stat.createdTime().getZone());
 
-            object.setTimeCreated(new DateTime(dateTimeCreated, timeZoneCreated));
+                object.setTimeCreated(new DateTime(dateTimeCreated, timeZoneCreated));
 
-            return object;
+                return object;
+            } catch (ErrorResponseException e) {
+                final ErrorCode code = e.errorResponse().errorCode();
+
+                if (code == ErrorCode.NO_SUCH_KEY) {
+                    return null;
+                }
+
+                throw e;
+            }
         });
     }
 
     public URL signUrl(BlobInfo blobInfo, long duration, TimeUnit unit, SignUrlOption... options) {
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             final int expiration = (int) TimeUnit.SECONDS.convert(duration, unit);
 
             final String signedUrl = client.getPresignedObjectUrl(Method.GET, blobInfo.getBucket(), blobInfo.getName(), expiration, Collections.emptyMap());
@@ -123,10 +135,10 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public boolean delete(Bucket bucket, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             try {
                 client.removeBucket(bucket.getName());
-                return false;
+                return true;
             } catch (ErrorResponseException e) {
                 final ErrorCode code = e.errorResponse().errorCode();
 
@@ -141,7 +153,7 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public boolean delete(StorageObject object, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             try {
                 client.removeObject(object.getBucket(), object.getName());
                 return true;
@@ -169,7 +181,7 @@ public class MinioStorageRpc implements StorageRpc {
 
     @Override
     public byte[] load(StorageObject object, Map<Option, ?> options) {
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             final InputStream input = client.getObject(object.getBucket(), object.getName());
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -211,7 +223,7 @@ public class MinioStorageRpc implements StorageRpc {
 
         final long blobSize = source.getSize().longValue();
 
-        return doRetuningAction(() -> {
+        return doAction(() -> {
             client.copyObject(target.getBucket(), target.getName(), null, null, source.getBucket(), source.getName(), null, null);
             return new RewriteResponse(rewriteRequest, rewriteRequest.target, blobSize, true, "", blobSize);
         });
@@ -362,17 +374,18 @@ public class MinioStorageRpc implements StorageRpc {
         throw new UnsupportedOperationException();
     }
 
-    private <R> R doRetuningAction(MinioSupplier<R> supplier) {
+    private <R> R doAction(MinioAction<R> action) {
         try {
-            return supplier.get();
+            return action.execute();
         } catch (InvalidKeyException | IllegalArgumentException | NoSuchAlgorithmException | MinioException | IOException e) {
             return ExceptionUtils.rethrow(e);
         }
     }
 
-    interface MinioSupplier<R> {
+    @FunctionalInterface
+    interface MinioAction<R> {
 
-        R get() throws MinioException, InvalidKeyException, IllegalArgumentException, NoSuchAlgorithmException, IOException;
+        R execute() throws MinioException, InvalidKeyException, IllegalArgumentException, NoSuchAlgorithmException, IOException;
 
     }
 
