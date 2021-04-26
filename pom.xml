@@ -30,7 +30,7 @@
     </scm>
 
     <properties>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <google-storage.version>1.103.1</google-storage.version>
         <minio.version>7.0.2</minio.version>
     </properties>
